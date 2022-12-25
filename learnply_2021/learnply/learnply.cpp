@@ -486,7 +486,17 @@ void keyboard(unsigned char key, int x, int y) {
 			line.m_vertices.push_back(icVector3(-3, 0, 1));
 			line.m_vertices.push_back(icVector3(-1, 0, 1));
 			line.m_rgb = icVector3(1, 0, 0);
+			line.m_weight = 5;
+
+			POLYLINE line2;
+			line2.m_vertices.push_back(icVector3(-1, 0, 1));
+			line2.m_vertices.push_back(icVector3(6, 0, 0));
+			line2.m_vertices.push_back(icVector3(6, 2, 0));
+			line2.m_rgb = icVector3(0, 1, 0);
+			line2.m_weight = 5;
+
 			polylines.push_back(line);
+			polylines.push_back(line2);
 			glutPostRedisplay();
 			/*
 			for (int i = -10; i < 10; i++) {
