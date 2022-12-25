@@ -495,8 +495,11 @@ void keyboard(unsigned char key, int x, int y) {
 			line2.m_rgb = icVector3(0, 1, 0);
 			line2.m_weight = 5;
 
-			polylines.push_back(line);
+			//polylines.push_back(line);
+			//polylines.push_back(line2);
+			line2.merge(line);
 			polylines.push_back(line2);
+
 			glutPostRedisplay();
 			/*
 			for (int i = -10; i < 10; i++) {

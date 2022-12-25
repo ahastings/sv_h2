@@ -1,11 +1,54 @@
 #include "Polyline.h"
 #include "GL/glew.h"//Then we want to create a display function
+#define EPSILON 1.0e-5
+
 bool POLYLINE::isNeighbor(const POLYLINE& line) {
-	//if ((m_vertices.front() - line.m_vertices.)
-	return true;
+	if ((m_vertices.front() - line.m_vertices.front()).length() < EPSILON ||
+		(m_vertices.front() - line.m_vertices.front()).length() < EPSILON ||
+		(m_vertices.front() - line.m_vertices.front()).length() < EPSILON ||
+		(m_vertices.front() - line.m_vertices.front()).length() < EPSILON) {
+		return true;
+	}else{
+		return false;
+	}
+	
 }
-bool POLYLINE::merge(const POLYLINE& line) {
-	return true;
+void POLYLINE::merge(const POLYLINE& line) {
+	if ((m_vertices.front() - line.m_vertices.front()).length() < EPSILON) {
+		POLYLINE line_ = line;
+		line_.m_vertices.pop_front();
+		for (auto i = line_.m_vertices.begin(); i != line_.m_vertices.end(); i++) {
+			m_vertices.push_front(*i);
+		}
+
+	}
+	else if ((m_vertices.front() - line.m_vertices.back()).length() < EPSILON) {
+		POLYLINE reverseLine = line;
+		reverseLine.m_vertices.pop_back();
+		reverseLine.m_vertices.reverse();
+		for (auto i = reverseLine.m_vertices.begin(); i != reverseLine.m_vertices.end(); i++) {
+			m_vertices.push_front(*i);
+		}
+
+	}
+	else if ((m_vertices.back() - line.m_vertices.front()).length() < EPSILON) {
+		POLYLINE line_ = line;
+		line_.m_vertices.front();
+		for (auto i = line_.m_vertices.begin(); i != line_.m_vertices.end(); i++) {
+			m_vertices.push_front(*i);
+		}
+
+	}
+	else if ((m_vertices.back() - line.m_vertices.back()).length() < EPSILON) {
+		POLYLINE reverseLine = line;
+		reverseLine.m_vertices.pop_back();
+		reverseLine.m_vertices.reverse();
+		for (auto i = reverseLine.m_vertices.begin(); i != reverseLine.m_vertices.end(); i++) {
+			m_vertices.push_front(*i);
+		}
+
+	}
+	return;//true;
 }
 void display_polyline(std::vector<POLYLINE>& polylines) {
 	glDisable(GL_LIGHTING);

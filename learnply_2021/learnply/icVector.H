@@ -3,7 +3,7 @@ This file contains data structures that are used for vector-related
 computations.
 Eugene Zhang  January 2005
 */
-
+#include <cmath>
 #ifndef icVector_is_defined
 #define icVector_is_defined
 
@@ -295,6 +295,10 @@ public:
 	inline icVector3& operator-=(const icVector3& a);
 	inline icVector3& operator*=(const icVector3& a);
 	inline icVector3& operator/=(const icVector3& a);
+	
+	inline double length() {
+		return std::sqrt(entry[0] * entry[0] + entry[1] * entry[1] + entry[2] * entry[2]);
+	}
 
 public:
 	union {

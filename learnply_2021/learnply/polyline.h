@@ -12,7 +12,7 @@ public:
 	double m_weight = 1.0;
 
 	bool isNeighbor(const POLYLINE& line);
-	bool merge(const POLYLINE& line);
+	void merge(const POLYLINE& line);//was  bool merge(const POLYLINE& line);
 
 private:
 
