@@ -16,8 +16,9 @@
 #include "tmatrix.h"
 
 #include "drawUtil.h"
-
+#include "Polyline.h"
 Polyhedron* poly;
+std::vector<POLYLINE> polylines;
 std::vector<PolyLine> lines;
 std::vector<icVector3> points;
 
@@ -471,7 +472,32 @@ void keyboard(unsigned char key, int x, int y) {
 		}
 		glutPostRedisplay();
 		break;
-
+	case '7':	// Drawing points and lines created by the dots_and_lines_example() function
+		display_mode = 1;
+		{
+			/*display_mode = 4;
+			dots_and_lines_example(&points, &lines);
+			glutPostRedisplay();
+			break;*/
+			POLYLINE line;
+			////streamlineFB(line, icVector  3 (2, 2, 0), 0.01); 
+			////polylines.push_back(line);
+			line.m_vertices.push_back(icVector3(-4, 0, 1));
+			line.m_vertices.push_back(icVector3(-3, 0, 1));
+			line.m_vertices.push_back(icVector3(-1, 0, 1));
+			line.m_rgb = icVector3(1, 0, 0);
+			polylines.push_back(line);
+			glutPostRedisplay();
+			/*
+			for (int i = -10; i < 10; i++) {
+				line.m_vertices.clear();
+				//streamline(line, icVector3(i * 1.0, 0, 0), 0.001);
+				line.m_rgb = icVector3(0.0, 1.0, 0.0);
+				polylines.push_back(line);
+				glutPostRedisplay();
+			}*/
+			break;
+		}
 	case 'r':	// reset rotation and transformation
 		mat_ident(rotmat);
 		translation[0] = 0;
@@ -823,6 +849,8 @@ void display(void)
 	/*display selected elements*/
 	display_selected_vertex(poly);
 	display_selected_quad(poly);
+	/*display polylines*/
+	display_polyline(polylines);
 
 
 	glFlush();

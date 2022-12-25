@@ -1,6 +1,24 @@
 #pragma once
 #include "icVector.H"
 #include <vector>
+#include <list>
+#include <utility>
+
+
+class POLYLINE {
+public:
+	std::list<icVector3> m_vertices;
+	icVector3 m_rgb = icVector3(1.0, 0.0, 0.0);
+	double m_weight = 1.0;
+
+	bool isNeighbor(const POLYLINE& line);
+	bool merge(const POLYLINE& line);
+
+private:
+
+};
+
+void display_polyline(std::vector<POLYLINE>& polylines);
 
 class LineSegment
 {
