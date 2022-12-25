@@ -21,7 +21,7 @@ Polyhedron* poly;
 std::vector<PolyLine> lines;
 std::vector<icVector3> points;
 
-/*scene related variables*/
+/*scene related variables   */
 const float zoomspeed = 0.9;
 int win_width = 1024;
 int win_height = 1024;
