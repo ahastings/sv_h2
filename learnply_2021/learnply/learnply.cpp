@@ -511,6 +511,25 @@ void keyboard(unsigned char key, int x, int y) {
 			}*/
 			break;
 		}
+	case '8':	// add your own display mode
+		display_mode = 6;
+		{
+
+		POLYLINE line;
+		line.m_rgb= icVector3(0.0, 1.0, 0.0); line.m_weight = 4;
+		for (int i = 0; i < poly->nverts; i++) {
+			if (std::abs(poly->vlist[i]->x) + std::abs(poly->vlist[i]->y) == 5) {
+				line.m_vertices.push_back(icVector3(
+					poly->vlist[i]->x,
+					poly->vlist[i]->y,
+					poly->vlist[i]->z));
+
+			}
+			// your code goes here
+		}
+		polylines.push_back(line);
+		glutPostOverlayRedisplay();
+		}break;
 	case 'r':	// reset rotation and transformation
 		mat_ident(rotmat);
 		translation[0] = 0;

@@ -1,5 +1,6 @@
 #pragma once
 #include "icVector.H"
+#include "polyhedron.H"
 #include <vector>
 #include <list>
 #include <utility>
@@ -19,6 +20,13 @@ private:
 };
 
 void display_polyline(std::vector<POLYLINE>& polylines);
+
+void marchingSqure(std::list<POLYLINE>& edges,
+	const Polyhedron& poly,
+	const double& thres);
+void makePolylineFromEdges(
+	std::vector<POLYLINE>& polylines,
+	const std::list <POLYLINE>& edges);
 
 class LineSegment
 {
@@ -55,3 +63,5 @@ public:
 
 // PolyLine is a list of connected line segments
 typedef std::vector<LineSegment> PolyLine;
+
+
