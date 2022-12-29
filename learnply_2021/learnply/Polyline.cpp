@@ -1,6 +1,12 @@
 #include "Polyline.h"
+//#include "polyhedron.h"
+//Polyhedron* poly;
 #include "GL/glew.h"//Then we want to create a display function
 #define EPSILON 1.0e-5
+#include "iostream"
+#include "gl/freeglut.h"
+#include "gl/glew.h"
+extern Polyhedron* poly;
 
 bool POLYLINE::isNeighbor(const POLYLINE& line) {
 	if ((m_vertices.front() - line.m_vertices.front()).length() < EPSILON ||
@@ -265,3 +271,186 @@ void makePolylineFromEdges(
 		}
 	}
 }
+//Polyhedron* poly1;
+void findMm(double& M, double& m) {
+	m = INFINITY;
+	M = -m;
+	for (int i = 0; i < poly->nverts; i++) {
+
+		auto& vertex = poly->vlist[i];
+
+		if (vertex->scalar < m) {
+			m = vertex->scalar;
+		}
+		if (vertex->scalar > M) {
+			M = vertex->scalar;
+		}
+	}
+
+}
+void project1() {
+	std::cout << "Assignment color for a scalar value" << std::endl;
+	double m = INFINITY;
+	double M = -m;
+
+	findMm(M, m);
+	std::cout << "Min: " << m << std::endl;
+	std::cout << "Max: " << M << std::endl;
+
+	for (int i = 0; i < poly->nverts; i++) {
+		auto& vertex = poly->vlist[i];
+		double s_v = vertex->scalar;
+		double gray_ = (s_v - m) / (M - m);
+
+		vertex->R = vertex->G = vertex->B = gray_; // Graying the colors r g b
+
+	}
+	glutPostRedisplay();
+}
+void project1b() {
+	std::cout << "Assignment color for a rgb value" << std::endl;
+
+
+	double m = INFINITY;
+	double M = -m;
+	findMm(M, m);
+	double Mminusm = M - m;
+
+	for (int i = 0; i < poly->nverts; i++) {
+		auto& vertex = poly->vlist[i];
+
+		double s_v = vertex->scalar;
+		double l = (s_v - m) / (M - m);
+		double r = (M - s_v) / (M - m);
+
+		icVector3 c1(1.0, 0.0, 0.0);
+		icVector3 c2(0.0, 0.0, 1.0);
+		//vertex->R = C1R * 1 + C2R * r;
+		icVector3 c = c1 * 1 + c2 * r;
+
+		vertex->R = c.x;
+		vertex->G = c.y;
+		vertex->B = c.z;
+
+		//vertex->R = vertex->G = vertex->B = gray_; // Graying the colors r g b
+
+	}
+	glutPostRedisplay();
+}
+
+
+void HSVtoRGB(
+	icVector3& rgb,
+	const icVector3& hsv) {
+	double H = hsv.x;
+	double S = hsv.y;
+	double v = hsv.z;
+	double C = S * v;
+	double X = C * (1 - abs(fmod(H / 60.0, 2) - 1));
+	double m = v - C;
+	double r, g, b;
+	if (H >= 0 && H < 60) {
+		r = C, g = X, b = 0;
+	}
+	else if (H >= 60 && H < 120) {
+		r = X, g = C, b = 0;
+	}
+	else if (H >= 120 && H < 180) {
+		r = 0, g = C, b = X;
+	}
+	else if (H >= 180 && H < 240) {
+		r = 0, g = X, b = C;
+	}
+	else if (H >= 240 && H < 300) {
+		r = X, g = 0, b = C;
+	}
+	else {
+		r = C, g = 0, b = X;
+	}
+	rgb.x = (r + m);
+	rgb.y = (g + m);
+	rgb.z = (b + m);
+}
+
+void RGBtoHSV(
+	icVector3& hsv,
+	const icVector3& rgb) {
+	double r = rgb.x;
+	double g = rgb.y;
+	double b = rgb.z;
+	// h , s, v = hue, saturation, value
+	double cmax = std::max(r, std::max(g, b)); // Max of r, g, b
+	double cmin = std::min(r, std::min(g, b)); // Min of r, g, b
+	double diff = cmax - cmin; // diff of cmax and min
+
+	double& h = hsv.x;
+	double& s = hsv.y;
+	double& v = hsv.z;
+	// if cmax equal to cmin then h = 0
+	if (cmax == cmin)
+		h = 0;
+	// if cmax equal to r then compute h
+	else if (cmax == r)
+		h = fmod(60 * ((g - b) / diff) + 360, 360);
+	// if cmax equal to g then compute h
+	else if (cmax == g)
+		h = fmod(60 * ((b - r) / diff) + 120, 360);
+	// if cmax equal to b then compute h
+	else if (cmax == b)
+		h = fmod(60 * ((r - g) / diff) + 240, 360);
+
+	//if max is zero -- edge/base case
+	if (cmax == 0)
+		s = 0;
+	else
+		s = (diff / cmax);
+
+	//compute v
+	v = cmax;
+}
+
+void project1c() {
+	std::cout << "C" << std::endl;
+	double m;
+	double M;
+	findMm(M, m);
+	for (int i = 0; i < poly->nverts; i++) {
+		auto& vertex = poly->vlist[i];
+		double s_v = vertex->scalar;
+		icVector3 c1(1.0, 0.0, 0.0);
+		icVector3 c2(0.0, 0.0, 1.0);
+		icVector3 HSVc1, HSVc2;
+		RGBtoHSV(HSVc1, c1);
+		RGBtoHSV(HSVc2, c2);
+		double l = (s_v - m) / (M - m);
+		double r = (M - s_v) / (M - m);
+		icVector3 HSVc = HSVc1 * l + HSVc2 * r;
+		icVector3 RGBc;
+		HSVtoRGB(RGBc, HSVc);
+		vertex->R = RGBc.x;
+		vertex->G = RGBc.y;
+		vertex->B = RGBc.z;
+
+	}
+	glutPostRedisplay();
+}
+
+
+void project1_2() {
+	std::cout << "Height field method" << std::endl;
+
+	double m;
+	double M;
+	findMm(M, m);
+	for (int i = 0; i < poly->nverts; i++) {
+		auto& vertex = poly->vlist[i];
+		double s_v = vertex->scalar;
+		double l = (s_v - m) / (M - m);
+		vertex->z = 10 * l;
+
+	}
+	glutPostRedisplay();
+}
+
+void project1_3b() {}
+

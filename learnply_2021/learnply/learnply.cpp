@@ -18,6 +18,7 @@
 #include "drawUtil.h"
 #include "Polyline.h"
 Polyhedron* poly;
+//Polyhedron* poly1;
 std::vector<POLYLINE> polylines;
 std::vector<PolyLine> lines;
 std::vector<icVector3> points;
@@ -90,7 +91,7 @@ Main program.
 int main(int argc, char* argv[])
 {
 	/*load mesh from ply file*/
-	FILE* this_file = fopen("../data/scalar_data/r2.ply", "r");
+	FILE* this_file = fopen("../data/scalar_data/r4.ply", "r");
 	poly = new Polyhedron(this_file);
 	fclose(this_file);
 	
@@ -575,6 +576,21 @@ void keyboard(unsigned char key, int x, int y) {
 		translation[1] = 0;
 		zoom = 1.0;
 		glutPostRedisplay();
+		break;
+	case 'a':
+		project1();
+		break;
+	case 'b':
+		project1b();
+		break;
+	case 'c':
+		project1c();
+		break;
+	case 'i':
+		project1_2();
+		break;
+	case 'e':
+		project1_3b();
 		break;
 	}
 }
