@@ -460,23 +460,8 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 
 	case '5':	// IBFV vector field display
-		//display_mode = 5;
-		//glutPostRedisplay();
-		//break;
 	{
-		for (int i = 1; i <= 20; i++) {
-			std::list<POLYLINE> edgei;
-			marchingSqure(edgei, *poly, i * 10);
-			std::vector<POLYLINE> polylinei;
-			makePolylineFromEdges(polylinei, edgei);
-			for (auto& polyline_ : polylinei) {
-				polyline_.m_rgb = icVector3(i / 20.0, 0, 0); 
-				polylines.push_back(polyline_);
-			}
-		}
-		glutPostOverlayRedisplay(); 
 	}break;
-
 
 	case '6':	// add your own display mode
 	{
@@ -550,25 +535,11 @@ void keyboard(unsigned char key, int x, int y) {
 		}
 		polylines.push_back(line);
 		glutPostOverlayRedisplay();
+		//glutPostRedisplay();
 		}break;
 	case '9':	// add your own display mode
 		display_mode = 6;
 		{
-
-			POLYLINE line;
-			line.m_rgb = icVector3(1.0, 1.0, 0.0); line.m_weight = 4;
-			for (int i = 0; i < poly->nverts; i++) {
-				if (std::abs(poly->vlist[i]->x) + std::abs(poly->vlist[i]->y) == 5) {
-					line.m_vertices.push_back(icVector3(
-						poly->vlist[i]->x,
-						poly->vlist[i]->y,
-						poly->vlist[i]->z));
-
-				}
-				// your code goes here
-			}
-			polylines.push_back(line);
-			glutPostOverlayRedisplay();
 		}break;
 	case 'r':	// reset rotation and transformation
 		mat_ident(rotmat);
@@ -588,9 +559,6 @@ void keyboard(unsigned char key, int x, int y) {
 		break;
 	case 'i':
 		project1_2();
-		break;
-	case 'e':
-		project1_3b();
 		break;
 	}
 }

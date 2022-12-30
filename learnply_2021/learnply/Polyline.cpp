@@ -452,5 +452,3 @@ void project1_2() {
 	glutPostRedisplay();
 }
 
-void project1_3b() {}
-

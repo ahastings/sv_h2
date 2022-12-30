@@ -69,5 +69,5 @@ void project1();
 void project1b();
 void project1c();
 void project1_2();
-void project1_3b();
+
 void findMm(double& M, double& m);
